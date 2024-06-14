@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rutas de Entrega de Pedidos</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1><img src="images/entregasLogo.png" alt="Icono de Reparto" class="icon">Rutas de Entrega de Pedidos</h1>
+    </header>
+    <main>
+        <div class="container">
+            <div class="left">
+                <img src="images/mapa.png" alt="Mapa de Rutas" class="map-image">
+            </div>
+            <div class="right">
+                <div class="form-section">
+                    <h2>Añadir Punto de Entrega</h2>
+                    <input type="text" id="vertex" placeholder="Nombre del punto de entrega">
+                    <button id="addVertexBtn">Añadir Punto</button>
+                </div>
+                <div class="form-section">
+                    <h2>Añadir Ruta</h2>
+                    <input type="text" id="vertex1" placeholder="Punto de inicio">
+                    <input type="text" id="vertex2" placeholder="Punto de destino">
+                    <input type="number" id="weight" placeholder="Distancia">
+                    <button id="addEdgeBtn">Añadir Ruta</button>
+                </div>
+                <div class="form-section">
+                    <h2>Encontrar Ruta Más Corta</h2>
+                    <input type="text" id="startNode" placeholder="Punto de inicio">
+                    <input type="text" id="endNode" placeholder="Punto de destino">
+                    <button id="findPathBtn">Encontrar Ruta</button>
+                </div>
+                <div id="result">
+                    <h2>Resultado</h2>
+                    <table id="resultTable">
+                        <thead>
+                            <tr>
+                                <th>Ruta</th>
+                                <th>Distancia Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td id="pathResult"></td>
+                                <td id="distanceResult"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script type="module" src="controller/script.mjs"></script>
+</body>
+</html>

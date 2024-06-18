@@ -8,14 +8,15 @@
 </head>
 <body>
     <header>
-        <h1><img src="images/entregasLogo.png" alt="Icono de Reparto" class="icon">Rutas de Entrega de Pedidos</h1>
+        <h1>Rutas de Entrega de Pedidos</h1>
+        <img src="images/entregasLogo.png" alt="Icono de Reparto" class="icon">
     </header>
     <main>
         <div class="container">
             <div class="left">
                 <img src="images/mapa.png" alt="Mapa de Rutas" class="map-image">
             </div>
-            <div class="right">
+            <div class="center">
                 <div class="form-section">
                     <h2>Añadir Punto de Entrega</h2>
                     <input type="text" id="vertex" placeholder="Nombre del punto de entrega">
@@ -28,27 +29,47 @@
                     <input type="number" id="weight" placeholder="Distancia">
                     <button id="addEdgeBtn">Añadir Ruta</button>
                 </div>
+            </div>
+            <div class="right">
                 <div class="form-section">
-                    <h2>Encontrar Ruta Más Corta</h2>
-                    <input type="text" id="startNode" placeholder="Punto de inicio">
-                    <input type="text" id="endNode" placeholder="Punto de destino">
-                    <button id="findPathBtn">Encontrar Ruta</button>
+                    <h2>Recorrido por Profundidad</h2>
+                    <input type="text" id="dfsStart" placeholder="Punto de inicio">
+                    <button id="dfsBtn">Recorrer</button>
+                    <table id="dfsTable">
+                        <thead>
+                            <tr>
+                                <th>Recorrido por Profundidad</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dfsPathResult"></tbody>
+                    </table>
                 </div>
-                <div id="result">
-                    <h2>Resultado</h2>
-                    <table id="resultTable">
+                <div class="form-section">
+                    <h2>Recorrido por Anchura</h2>
+                    <input type="text" id="bfsStart" placeholder="Punto de inicio">
+                    <button id="buttonAnchura">Recorrer</button>
+                    <table id="bfsTable">
+                        <thead>
+                            <tr>
+                                <th>Recorrido por Anchura</th>
+                            </tr>
+                        </thead>
+                        <tbody id="MostrarRecorridosAn"></tbody>
+                    </table>
+                </div>
+                <div class="form-section">
+                    <h2>Ruta más Corta</h2>
+                    <input type="text" id="startNodeDijkstra" placeholder="Punto de inicio">
+                    <input type="text" id="endNodeDijkstra" placeholder="Punto de destino">
+                    <button id="dijkstraBtn">Encontrar Ruta</button>
+                    <table id="dijkstraTable">
                         <thead>
                             <tr>
                                 <th>Ruta</th>
-                                <th>Distancia Total</th>
+                                <th>Total</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td id="pathResult"></td>
-                                <td id="distanceResult"></td>
-                            </tr>
-                        </tbody>
+                        <tbody id="dijkstraResult"></tbody>
                     </table>
                 </div>
             </div>

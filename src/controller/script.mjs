@@ -2,62 +2,118 @@ import Graph from '../models/graph.mjs';
 
 const graph = new Graph();
 
-window.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('addVertexBtn').addEventListener('click', addVertex);
-    document.getElementById('addEdgeBtn').addEventListener('click', addEdge);
-    document.getElementById('findPathBtn').addEventListener('click', findShortestPath);
-});
+const btnAgregarDestino = document.getElementById("addVertexBtn");
+const btnAgregarConexion = document.getElementById("addEdgeBtn");
+const btnRecorridoProfundidad = document.getElementById("dfsBtn");
+const btnRecorridoAnchura = document.getElementById("buttonAnchura");
+const btnDijkstra = document.getElementById("dijkstraBtn");
 
-export function addVertex() {
-    const vertex = document.getElementById('vertex').value;
-    if (vertex) {
-        graph.addVertex(vertex);
+const imprimirDFS = document.getElementById("dfsPathResult");
+const imprimirBFS = document.getElementById("MostrarRecorridosAn");
+const resultadoDijkstra = document.getElementById("dijkstraResult");
+
+btnAgregarDestino.addEventListener("click", () => {
+    const terminal = document.getElementById("vertex").value.trim();
+
+    if (terminal === "") {
+        alert('Ingrese un nombre válido para el punto de entrega');
+        return;
+    }
+
+    if (graph.addVertex(terminal)) {
         alert('Punto de entrega añadido');
     } else {
-        alert('Ingrese un nombre válido para el punto de entrega');
+        alert('El punto de entrega ya existe');
     }
-}
+});
 
-export function addEdge() {
-    const vertex1 = document.getElementById('vertex1').value;
-    const vertex2 = document.getElementById('vertex2').value;
-    const weight = parseFloat(document.getElementById('weight').value);
-    try {
-        if (vertex1 && vertex2 && !isNaN(weight)) {
-            graph.addEdge(vertex1, vertex2, weight);
-            alert('Ruta añadida');
-        } else {
-            alert('Ingrese valores válidos para la ruta');
-        }
-    } catch (error) {
-        alert(error.message);
+btnAgregarConexion.addEventListener("click", () => {
+    const terminal = document.getElementById("vertex1").value.trim();
+    const destino = document.getElementById("vertex2").value.trim();
+    const peso = parseInt(document.getElementById("weight").value);
+
+    if (terminal === "" || destino === "" || isNaN(peso)) {
+        alert('Ingrese valores válidos para la ruta');
+        return;
     }
-}
 
-export function findShortestPath() {
-    const startNode = document.getElementById('startNode').value;
-    const endNode = document.getElementById('endNode').value;
-    if (startNode && endNode) {
-        const path = graph.dijkstra(startNode, endNode);
-        if (path.length) {
-            const distance = calculateTotalDistance(path);
-            document.getElementById('pathResult').innerText = path.join(' -> ');
-            document.getElementById('distanceResult').innerText = distance;
-        } else {
-            alert('No se encontró una ruta entre los puntos especificados');
-        }
+    if (graph.addEdge(terminal, destino, peso)) {
+        alert('Ruta añadida');
     } else {
-        alert('Ingrese puntos de inicio y destino válidos');
+        alert('No se pudo agregar la ruta. Verifique que ambos puntos de entrega existan.');
     }
-}
+});
 
-function calculateTotalDistance(path) {
-    let totalDistance = 0;
-    for (let i = 0; i < path.length - 1; i++) {
-        const vertex1 = path[i];
-        const vertex2 = path[i + 1];
-        const edge = graph.edges[vertex1].find(e => e.node === vertex2);
-        totalDistance += edge.weight;
+btnRecorridoProfundidad.addEventListener("click", () => {
+    if (graph.numVertices() === 0) {
+        alert('No hay rutas guardadas');
+        return;
     }
-    return totalDistance;
-}
+
+    imprimirDFS.innerHTML = '';
+    const startNode = document.getElementById("dfsStart").value.trim();
+
+    if (startNode === "" || !graph.getVertices().includes(startNode)) {
+        alert('Ingrese un punto de inicio válido para el recorrido');
+        return;
+    }
+
+    graph.dfs(startNode, (vertex) => {
+        let row = imprimirDFS.insertRow();
+        let cell = row.insertCell(0);
+        cell.innerHTML = vertex;
+    });
+});
+
+btnRecorridoAnchura.addEventListener("click", () => {
+    if (graph.numVertices() === 0) {
+        alert('No hay rutas guardadas');
+        return;
+    }
+
+    imprimirBFS.innerHTML = '';
+    const startNode = document.getElementById("bfsStart").value.trim();
+
+    if (startNode === "" || !graph.getVertices().includes(startNode)) {
+        alert('Ingrese un punto de inicio válido para el recorrido');
+        return;
+    }
+
+    graph.bfs(startNode, (vertex) => {
+        let row = imprimirBFS.insertRow();
+        let cell = row.insertCell(0);
+        cell.innerHTML = vertex;
+    });
+});
+
+btnDijkstra.addEventListener("click", () => {
+    if (graph.numVertices() === 0) {
+        alert('No hay rutas guardadas');
+        return;
+    }
+
+    const startNode = document.getElementById("startNodeDijkstra").value.trim();
+    const endNode = document.getElementById("endNodeDijkstra").value.trim();
+
+    if (startNode === "" || endNode === "" || !graph.getVertices().includes(startNode) || !graph.getVertices().includes(endNode)) {
+        alert('Ingrese puntos de inicio y destino válidos');
+        return;
+    }
+
+    const { path, distance } = graph.dijkstra(startNode, endNode);
+
+    resultadoDijkstra.innerHTML = '';
+
+    if (path.length) {
+        let row = resultadoDijkstra.insertRow();
+        let cellPath = row.insertCell(0);
+        let cellTotal = row.insertCell(1);
+        cellPath.innerHTML = path.join(' -> ');
+        cellTotal.innerHTML = distance; // Muestra la distancia total
+    } else {
+        let row = resultadoDijkstra.insertRow();
+        let cell = row.insertCell(0);
+        cell.colSpan = 2;
+        cell.innerHTML = 'No se encontró un camino';
+    }
+});

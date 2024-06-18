@@ -16,7 +16,7 @@ btnAgregarDestino.addEventListener("click", () => {
     const terminal = document.getElementById("vertex").value.trim();
 
     if (terminal === "") {
-        alert('Ingrese un nombre válido para el punto de entrega');
+        alert('Ingrese el punto de entrega');
         return;
     }
 
@@ -33,7 +33,7 @@ btnAgregarConexion.addEventListener("click", () => {
     const peso = parseInt(document.getElementById("weight").value);
 
     if (terminal === "" || destino === "" || isNaN(peso)) {
-        alert('Ingrese valores válidos para la ruta');
+        alert('Ingrese la ruta');
         return;
     }
 
@@ -54,7 +54,7 @@ btnRecorridoProfundidad.addEventListener("click", () => {
     const startNode = document.getElementById("dfsStart").value.trim();
 
     if (startNode === "" || !graph.getVertices().includes(startNode)) {
-        alert('Ingrese un punto de inicio válido para el recorrido');
+        alert('Ingrese un punto de inicio para el recorrido');
         return;
     }
 
@@ -75,7 +75,7 @@ btnRecorridoAnchura.addEventListener("click", () => {
     const startNode = document.getElementById("bfsStart").value.trim();
 
     if (startNode === "" || !graph.getVertices().includes(startNode)) {
-        alert('Ingrese un punto de inicio válido para el recorrido');
+        alert('Ingrese un punto de inicio para el recorrido');
         return;
     }
 

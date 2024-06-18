@@ -7,6 +7,7 @@ class Graph {
         this.#matrizAdyacencia = [];
     }
 
+
     addVertex(vertex) {
         if (this.#map.has(vertex)) {
             return false;

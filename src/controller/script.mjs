@@ -109,7 +109,7 @@ btnDijkstra.addEventListener("click", () => {
         let cellPath = row.insertCell(0);
         let cellTotal = row.insertCell(1);
         cellPath.innerHTML = path.join(' -> ');
-        cellTotal.innerHTML = distance; // Muestra la distancia total
+        cellTotal.innerHTML = distance;
     } else {
         let row = resultadoDijkstra.insertRow();
         let cell = row.insertCell(0);

@@ -7,7 +7,6 @@ class Graph {
         this.#matrizAdyacencia = [];
     }
 
-    // Método para añadir un vértice
     addVertex(vertex) {
         if (this.#map.has(vertex)) {
             return false;
@@ -17,12 +16,10 @@ class Graph {
         return true;
     }
 
-    // Método para obtener la lista de vértices
     getVertices() {
         return Array.from(this.#map.keys());
     }
 
-    // Método para añadir una arista
     addEdge(src, dest, weight) {
         if (!this.#map.has(src) || !this.#map.has(dest)) {
             return false;
@@ -34,7 +31,6 @@ class Graph {
         return true;
     }
 
-    // Método para realizar DFS
     dfs(startNode, visitFn) {
         const stack = [startNode];
         const visited = new Set();
@@ -53,7 +49,6 @@ class Graph {
         }
     }
 
-    // Método para realizar BFS
     bfs(startNode, visitFn) {
         const queue = [startNode];
         const visited = new Set();
@@ -72,7 +67,6 @@ class Graph {
         }
     }
 
-    // Método para realizar Dijkstra
     dijkstra(startNode, endNode) {
         let distances = {};
         let visited = {};
@@ -119,7 +113,6 @@ class Graph {
         return { path: [], distance: 0 };
     }
 
-    // Método para obtener el número de vértices
     numVertices() {
         return this.#map.size;
     }

@@ -52,6 +52,16 @@ export default class LinkedList {
         console.log(result);
     }
 
+    getNodes() {
+        let nodes = [];
+        let current = this.#head;
+        while (current) {
+            nodes.push(current.value);
+            current = current.next;
+        }
+        return nodes;
+    }
+
     get head() {
         return this.#head;
     }

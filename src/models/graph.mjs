@@ -1,3 +1,5 @@
+import LinkedList from './LinkendList.mjs';
+
 class Graph {
     #map;
     #matrizAdyacencia;
@@ -6,7 +8,6 @@ class Graph {
         this.#map = new Map();
         this.#matrizAdyacencia = [];
     }
-
 
     addVertex(vertex) {
         if (this.#map.has(vertex)) {
@@ -27,8 +28,8 @@ class Graph {
         }
         const srcIndex = this.#map.get(src);
         const destIndex = this.#map.get(dest);
-        this.#matrizAdyacencia[srcIndex].addNode({ node: dest, weight: weight });
-        this.#matrizAdyacencia[destIndex].addNode({ node: src, weight: weight });
+        this.#matrizAdyacencia[srcIndex].push(dest, weight);
+        this.#matrizAdyacencia[destIndex].push(src, weight);
         return true;
     }
 
@@ -68,83 +69,74 @@ class Graph {
         }
     }
 
-    dijkstra(startNode, endNode) {
-        let distances = {};
-        let visited = {};
-        let previous = {};
-        let queue = [];
-
-        for (let vertex of this.#map.keys()) {
-            distances[vertex] = Infinity;
-            visited[vertex] = false;
-            previous[vertex] = null;
-        }
-
-        distances[startNode] = 0;
-        queue.push({ node: startNode, distance: 0 });
-
-        while (queue.length) {
-            let { node } = queue.sort((a, b) => a.distance - b.distance).shift();
-            if (node === endNode) {
-                let path = [];
-                let totalDistance = distances[node];
-                while (previous[node]) {
-                    path.push(node);
-                    node = previous[node];
-                }
-                return { path: path.concat(startNode).reverse(), distance: totalDistance };
-            }
-            if (!visited[node]) {
-                visited[node] = true;
-                const neighborsLinkedList = this.#matrizAdyacencia[this.#map.get(node)];
-                let current = neighborsLinkedList.head;
-                while (current) {
-                    let neighbor = current.value.node;
-                    let weight = current.value.weight;
-                    let newDistance = distances[node] + weight;
-                    if (newDistance < distances[neighbor]) {
-                        distances[neighbor] = newDistance;
-                        previous[neighbor] = node;
-                        queue.push({ node: neighbor, distance: newDistance });
-                    }
-                    current = current.next;
+    dijkstra(startVertex, endVertex) {
+        const infinit = 1000000000000000000000;
+        const W = this.#matrizAdyacencia; // Matriz de adyacencia
+        const numVertices = this.numVertices(); // Número de vértices en el grafo
+        const D = Array(numVertices).fill(infinit); // Distancias
+        const previous = {}; // Vértice previo en el camino min
+        const L = new Set(); // Vértices visitados
+        const LPrime = new Set(this.#map.keys()); // Vértices no visitados
+        const startIndex = this.#map.get(startVertex);
+        D[startIndex] = 0;
+    
+        while (L.size < numVertices) {
+            // Encuentra el vértice en LPrime con la distancia mínima en D
+            let minVertex = null;
+            let minDist = infinit;
+            for (let vertex of LPrime) {
+                const vertexIndex = this.#map.get(vertex);
+                if (D[vertexIndex] < minDist) {
+                    minDist = D[vertexIndex];
+                    minVertex = vertex;
                 }
             }
+    
+            if (minVertex === null) {
+                break; // No hay un vértice 
+            }
+    
+            // Agrega el vértice mínimo a L y lo elimina de LPrime
+            L.add(minVertex);
+            LPrime.delete(minVertex);
+    
+            // Obtiene el índice del vértice actual
+            const u = this.#map.get(minVertex);
+    
+            // Recorre los vecinos del vértice actual
+            const neighbors = W[u]; // Obtenemos los vecinos 
+            let current = neighbors.head;
+            while (current) {
+                const v = this.#map.get(current.value.node);
+                const weight = current.value.weight;
+                if (D[u] + weight < D[v]) {
+                    D[v] = D[u] + weight;
+                    previous[current.value.node] = minVertex;
+                }
+                current = current.next;
+            }
         }
-        return { path: [], distance: 0 };
-    }
+    
+        // Reconstruir el camino más corto si se especifica un vértice final
+        if (endVertex) {
+            const endIndex = this.#map.get(endVertex);
+            if (D[endIndex] === infinit) {
+                return { path: [], distance: infinit };
+            }
+            const path = [];
+            let step = endVertex;
+            while (step) {
+                path.push(step);
+                step = previous[step];
+            }
+            return { path: path.reverse(), distance: D[endIndex] };
+        }
+    
+        return { distances: D, previous: previous };
+    }    
 
     numVertices() {
         return this.#map.size;
-    }
-}
-
-class LinkedList {
-    constructor() {
-        this.head = null;
-    }
-
-    addNode(value) {
-        const newNode = { value, next: null };
-        if (!this.head) {
-            this.head = newNode;
-        } else {
-            let current = this.head;
-            while (current.next) {
-                current = current.next;
-            }
-            current.next = newNode;
-        }
-    }
-
-    getNodes() {
-        let nodes = [];
-        let current = this.head;
-        while (current) {
-            nodes.push(current.value);
-            current = current.next;
-        }
-        return nodes;
     }
 }
 
